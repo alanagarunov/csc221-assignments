@@ -10,6 +10,14 @@ public class myCircle extends myShape {
         this.r = r;
     }
 
+    public double getArea(){
+        return (Math.PI*Math.pow(r, 2));
+    }
+
+    public double getPerimeter(){
+        return (2*Math.PI*r);
+    }
+
     @Override
     public void draw(GraphicsContext gc){
         gc.setFill(getC().getARGB());

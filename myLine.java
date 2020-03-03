@@ -1,5 +1,3 @@
-package sample;
-
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.shape.Line;
 
@@ -15,17 +13,21 @@ public class myLine extends myShape{
         EndY = endY;
     }
 
-    public double getLength(Line line){
-        double x1 = line.getStartX();
-        double x2 = line.getStartY();
-        double y1 = line.getEndX();
-        double y2 = line.getEndY();
+    public double getLength(myLine line){
+        double x1 = line.getX();
+        double x2 = this.EndX;
+        double y1 = line.getY();
+        double y2 = this.EndY;
         //double totallength = sqrt(pow((x2 - x1), 2) - pow((y2 - y1), 2));
         return sqrt(pow((x2 - x1), 2) - pow((y2 - y1), 2));
     }
 
-    public String toString(Line line){
-        return line.toString();
+    public double getAngle(myLine line){
+        double x1 = line.getX();
+        double x2 = this.EndX;
+        double y1 = line.getY();
+        double y2 = this.EndY;
+        return Math.atan2((x2 - x1), (y2 - y1));
     }
 
     @Override

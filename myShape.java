@@ -36,6 +36,8 @@ public class myShape extends Object {
     public void setC(myColor c) {
         this.c = c;
     }
+    
+    public String toString(){ return "The color for this class is " + getC(); }
 
     public void draw(GraphicsContext gc){
         //Canvas canvas = new Canvas(x,y);

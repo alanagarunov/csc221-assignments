@@ -1,45 +1,68 @@
+import javafx.application.Application;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Group;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import java.lang.Math;
-import javafx.scene.shape.Polygon;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.Pane;
+import javafx.stage.Stage;
 
-public class myPolygon extends myShape{
-    private int x, y, n, r;
-    double[] Xcorrds;
-    double[] Ycorrds;
-
-    public myPolygon(int x1, int y1, int x, int y, int n, int r, myColor c) {
-        super(x, y, c);
-        this.x = x1;
-        this.y = y1;
-        this.n = n;
-        this.r = r;
-        this.Xcorrds = new double[n];
-        this.Ycorrds = new double[n];
-
-        for(int i = 0; i < n; i++){
-            this.Xcorrds[i] = r* Math.cos(2*Math.PI*i/n) + this.x;                    //((Math.sin((double)i/(n*2*Math.PI)))* r) + this.x;
-            System.out.println(Xcorrds[i]);
-            this.Ycorrds[i] = r* Math.sin(2*Math.PI*i/n) + this.y;                    //((Math.cos((double)i/(n*2*Math.PI)))* r) + this.y;
-            System.out.println(Ycorrds[i]);
-        }
-    }
-    public double getPerimeter(myPolygon poly){
-        return getSides(poly)*this.n;
-    }
-    public double getSides(myPolygon poly){
-        return Math.sqrt((Xcorrds[0]*Xcorrds[0]) + (Ycorrds[0]*Ycorrds[0]));
-    }
-    public double getArea(myPolygon poly){
-        return ((getSides(poly)/(2*Math.tan(180/this.n)))*getPerimeter(poly))/2;
-    }
+public class Main extends Application {
 
     @Override
-    public void draw(GraphicsContext gc) {
-        //Polygon p1 = new Polygon();
-        //double[] Xcorrds = new double[n];
-        //double[] Ycorrds = new double[n];
-        //gc.fillPolygon(Xcorrds,  Ycorrds, n);
-        gc.setFill(getC().getARGB());
-        gc.fillPolygon(Xcorrds, Ycorrds, n);
+    public void start(Stage primaryStage) throws Exception{
+        //Parent root = FXMLLoader.load(getClass().getResource("sample.fxml"));
+        BorderPane root = new BorderPane();
+        primaryStage.setTitle("Hello World");
+        int w = 500;
+        int h = 500;
+
+        myShape c1 = new myShape(w,h, myColor.BLUE);
+        Canvas canvas = new Canvas(c1.getX(), c1.getY());
+        GraphicsContext gc = canvas.getGraphicsContext2D();
+        myLine l1 = new myLine(0,0, w, h, myColor.BLACK);
+        myLine l2 = new myLine(0,0, 0, h, myColor.BLACK);
+        myLine l3 = new myLine(0,h, w, 0, myColor.BLACK);
+        myLine l4 = new myLine(0,0, w, 0, myColor.BLACK);
+        myLine l5 = new myLine(w,0, w, h, myColor.BLACK);
+        myLine l6 = new myLine(0,h, w, h, myColor.BLACK);
+
+
+        myPolygon p1 = new myPolygon((int)(h*0.50),(int)(w*0.50),0,0,6,200, myColor.BLACK);
+        myCircle cir1 = new myCircle((int)(h*0.40),(int)(w*0.40),0,0,100, myColor.YELLOW);
+        myCircle cir2 = new myCircle((int)(h*0.45),(int)(w*0.45),0,0,45, myColor.PINK);
+        myPolygon p2 = new myPolygon((int)(h*0.50),(int)(w*0.50),0,0,6,150, myColor.GREEN);
+        myPolygon p3 = new myPolygon((int)(h*0.50),(int)(w*0.50),0,0,6,110, myColor.BLUE);
+
+        p1.draw(gc);
+        cir1.draw(gc);
+        p2.draw(gc);
+        cir2.draw(gc);
+        p3.draw(gc);
+
+        l1.draw(gc);
+        l2.draw(gc);
+        l3.draw(gc);
+        l4.draw(gc);
+        l5.draw(gc);
+        l6.draw(gc);
+
+        Pane P = new Pane();
+        P.getChildren().add(canvas);
+        //P.getChildren().add(l1.draw(gc));
+        root.setCenter(P);
+        Scene sc = new Scene(root, 500,500);
+
+        //primaryStage.setScene(new Scene(root, 300, 275));
+        primaryStage.setScene(sc);
+        primaryStage.show();
+    }
+
+
+    public static void main(String[] args) {
+        launch(args);
+        System.out.println(myColor.RED.getARGB());
     }
 }

@@ -1,3 +1,4 @@
+
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Group;
@@ -16,20 +17,25 @@ public class Main extends Application {
         //Parent root = FXMLLoader.load(getClass().getResource("sample.fxml"));
         BorderPane root = new BorderPane();
         primaryStage.setTitle("Hello World");
+        int w = 500;
+        int h = 500;
 
-        myShape c1 = new myShape(500,500, myColor.BLUE);
+        myShape c1 = new myShape(w,h, myColor.BLUE);
         Canvas canvas = new Canvas(c1.getX(), c1.getY());
         GraphicsContext gc = canvas.getGraphicsContext2D();
-        myLine l1 = new myLine(0,0, 500, 500, myColor.BLACK);
-        myLine l2 = new myLine(5,5, 500, 5, myColor.BLACK);
-        myLine l3 = new myLine(5,5, 5, 500, myColor.BLACK);
-        myLine l4 = new myLine(500,0, 0, 500, myColor.BLACK);
+        myLine l1 = new myLine(0,0, w, h, myColor.BLACK);
+        myLine l2 = new myLine(0,0, 0, h, myColor.BLACK);
+        myLine l3 = new myLine(0,h, w, 0, myColor.BLACK);
+        myLine l4 = new myLine(0,0, w, 0, myColor.BLACK);
+        myLine l5 = new myLine(w,0, w, h, myColor.BLACK);
+        myLine l6 = new myLine(0,h, w, h, myColor.BLACK);
 
-        myPolygon p1 = new myPolygon(250,250,0,0,6,200, myColor.BLACK);
-        myCircle cir1 = new myCircle(200,200,0,0,100, myColor.YELLOW);
-        myCircle cir2 = new myCircle(225,225,0,0,50, myColor.PINK);
-        myPolygon p2 = new myPolygon(250,250,0,0,5,160, myColor.GREEN);
-        myPolygon p3 = new myPolygon(250,250,0,0,6,110, myColor.BLUE);
+
+        myPolygon p1 = new myPolygon((int)(h*0.50),(int)(w*0.50),0,0,6,200, myColor.BLACK);
+        myCircle cir1 = new myCircle((int)(h*0.40),(int)(w*0.40),0,0,100, myColor.YELLOW);
+        myCircle cir2 = new myCircle((int)(h*0.45),(int)(w*0.45),0,0,45, myColor.PINK);
+        myPolygon p2 = new myPolygon((int)(h*0.50),(int)(w*0.50),0,0,6,150, myColor.GREEN);
+        myPolygon p3 = new myPolygon((int)(h*0.50),(int)(w*0.50),0,0,6,110, myColor.BLUE);
 
         p1.draw(gc);
         cir1.draw(gc);
@@ -41,7 +47,8 @@ public class Main extends Application {
         l2.draw(gc);
         l3.draw(gc);
         l4.draw(gc);
-
+        l5.draw(gc);
+        l6.draw(gc);
 
         Pane P = new Pane();
         P.getChildren().add(canvas);

@@ -27,7 +27,7 @@ public class Main extends Application {
         primaryStage.show(); */
 
         Connection conn = null;
-        Button AddStudent, Addcourse, Addclasss;
+        Button AddStudent, Addcourse, Addclasss, Showbygpa;
         TextField textField;
         try {
             //Class.forName("com.mysql.jdbc.Driver");
@@ -107,12 +107,135 @@ public class Main extends Application {
                     ex.printStackTrace();
                 }
         });
+
+        Addcourse = new Button("Add course");
+        Addcourse.setOnAction(e -> {
+            Connection conn2 = null;
+            try {
+                Class.forName("org.sqlite.JDBC");
+                conn2 = DriverManager.getConnection("jdbc:sqlite:C:\\Users\\Alan\\Documents\\javadocuments\\finalproject\\thedata.db");
+                if (conn2 != null) {
+                    String IDclass = dataInput("What is the class ID?", "", "Ex: 0001");
+                    String title = dataInput("What is the course title?", "", "Ex: MATH201");
+                    String department = dataInput("What department is the course in?", "", "Ex: Math");
+
+                    Statement stmt6 = conn2.createStatement();
+                    boolean result6 = stmt6.execute("INSERT INTO Courses VALUES ( '" + IDclass + "', '" + title + "', '" + department + "')");
+                    System.out.println("\tInsert creation result: " + result6);
+
+                    Main.showColumns(conn2, "Courses");
+                    Main.showValues(conn2, "Courses");
+
+                    conn2.close();
+                }
+            }   catch(SQLException ex){
+                System.out.println("SQLException: " + ex.getMessage());
+                ex.printStackTrace();
+            } catch(Exception ex){
+                System.out.println("Exception: " + ex.getMessage());
+                ex.printStackTrace();
+            }
+        });
+
+        Addclasss = new Button("Add Students to class");
+        Addclasss.setOnAction(e -> {
+            Connection conn3 = null;
+            try {
+                Class.forName("org.sqlite.JDBC");
+                conn3 = DriverManager.getConnection("jdbc:sqlite:C:\\Users\\Alan\\Documents\\javadocuments\\finalproject\\thedata.db");
+                if (conn3 != null) {
+                    String IDstudent = dataInput("What is the ID of the student?", "", "Ex: 0001");
+                    Statement stmt7 = conn3.createStatement();
+                    boolean resultstudent = stmt7.execute("SELECT * FROM Student WHERE student_ID = ' " +  IDstudent  + " '");
+                    if(!resultstudent){
+                        System.out.println("This student doesn't exist or the ID is incorrect.");
+                        System.exit(0);
+                    }
+                    String IDcourse = dataInput("What is the ID of the course?", "", "Ex: 001");
+                    Statement stmt8 = conn3.createStatement();
+                    boolean resultcourse = stmt8.execute("SELECT * FROM Student WHERE student_ID = ' " +  IDcourse  + " '");
+                    if(!resultcourse){
+                        System.out.println("This course doesn't exist or the ID is incorrect.");
+                        System.exit(0);
+                    }
+                    String year = dataInput("What year is the class taken?", "", "Ex: 2020");
+                    String section = dataInput("What section is this class in?", "", "Ex: PR1");
+                    String semester = dataInput("What semester is this class in?", "", "Ex: Spring 2020");
+                    String gpa = dataInput("What is the gpa of the student in this class?", "", "Ex: A, B, C, D, F, or W");
+
+
+
+                    Statement stmt6 = conn3.createStatement();
+                    boolean result6 = stmt6.execute("INSERT INTO Classes VALUES ( '" + IDcourse + "', '" + IDstudent + "', '" + section +  "', '" + year + "', '" +  semester + "', '" + gpa + "')");
+                    System.out.println("\tInsert creation result: " + result6);
+
+                    Main.showColumns(conn3, "Classes");
+                    Main.showValues(conn3, "Classes");
+
+                    conn3.close();
+                }
+            }   catch(SQLException ex){
+                System.out.println("SQLException: " + ex.getMessage());
+                ex.printStackTrace();
+            } catch(Exception ex){
+                System.out.println("Exception: " + ex.getMessage());
+                ex.printStackTrace();
+            }
+        });
+
+        Showbygpa = new Button("Show students by GPA");
+        Showbygpa.setOnAction(e -> {
+            Connection conn4 = null;
+            try {
+                Class.forName("org.sqlite.JDBC");
+                conn4 = DriverManager.getConnection("jdbc:sqlite:C:\\Users\\Alan\\Documents\\javadocuments\\finalproject\\thedata.db");
+                if (conn4 != null) {
+
+                    Statement stmt6 = conn4.createStatement();
+                    int acount = 0, bcount =0 , ccount =0 , dcount = 0, fcount = 0, wcount = 0;
+                    ResultSet rs1 = stmt6.executeQuery("SELECT course_ID, year, gpa FROM Classes");
+                    while(rs1.next()){
+                        if((rs1.getString("course_ID").equalsIgnoreCase("CSc221")) && (rs1.getString("gpa").equalsIgnoreCase("A"))){
+                            System.out.println(rs1.getString("course_ID") + "\t" + rs1.getString("gpa"));
+                            acount++;
+                        } else if((rs1.getString("course_ID").equalsIgnoreCase("CSc221")) && (rs1.getString("gpa").equalsIgnoreCase("B"))){
+                            System.out.println(rs1.getString("course_ID") + "\t" + rs1.getString("gpa"));
+                            bcount++;
+                        } else if((rs1.getString("course_ID").equalsIgnoreCase("CSc221")) && (rs1.getString("gpa").equalsIgnoreCase("C"))){
+                            System.out.println(rs1.getString("course_ID") + "\t" + rs1.getString("gpa"));
+                            ccount++;
+                        } else if((rs1.getString("course_ID").equalsIgnoreCase("CSc221")) && (rs1.getString("gpa").equalsIgnoreCase("D"))){
+                            System.out.println(rs1.getString("course_ID") + "\t" + rs1.getString("gpa"));
+                            dcount++;
+                        } else if((rs1.getString("course_ID").equalsIgnoreCase("CSc221")) && (rs1.getString("gpa").equalsIgnoreCase("F"))){
+                            System.out.println(rs1.getString("course_ID") + "\t" + rs1.getString("gpa"));
+                            fcount++;
+                        } else if((rs1.getString("course_ID").equalsIgnoreCase("CSc221")) && (rs1.getString("gpa").equalsIgnoreCase("W"))){
+                            System.out.println(rs1.getString("course_ID") + "\t" + rs1.getString("gpa"));
+                            wcount++;
+                        }
+                    }
+                    System.out.print("Number of people with A: " + acount + " .Number of people with B: " + bcount + " .Number of people with C: " + ccount + " .Number of people with D: " + dcount + " .Number of people with F: " + fcount + " .Number of people with W: " + wcount);
+
+                    conn4.close();
+                }
+            }   catch(SQLException ex){
+                System.out.println("SQLException: " + ex.getMessage());
+                ex.printStackTrace();
+            } catch(Exception ex){
+                System.out.println("Exception: " + ex.getMessage());
+                ex.printStackTrace();
+            }
+        });
+
+
+
         HBox buttons = new HBox(30);
-        buttons.getChildren().addAll(AddStudent);
+        buttons.getChildren().addAll(AddStudent, Addcourse, Addclasss, Showbygpa);
         BorderPane pane = new BorderPane();
         pane.setTop(buttons);
         Text t = new Text(10, 20, "School idol managment simulator");
-        t.setFont(Font.font("Helvetica", FontPosture.ITALIC, 12));
+        t.setFont(Font.font("Helvetica", FontPosture.ITALIC, 20));
         t.setFill(Color.BLACK);
 
         VBox vbox = new VBox();
@@ -125,8 +248,6 @@ public class Main extends Application {
         primaryStage.setTitle("");
         stage.setScene(scene);
         stage.show();
-
-
 
 
 
@@ -217,8 +338,3 @@ public class Main extends Application {
         }
     }
 }
-
-
-
-
-

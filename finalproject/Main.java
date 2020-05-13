@@ -1,5 +1,3 @@
-package sample;
-
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -16,6 +14,10 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import java.sql.*;
 import java.util.Optional;
+import javafx.scene.chart.*;
+import javafx.geometry.Side;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 public class Main extends Application {
 
@@ -90,6 +92,14 @@ public class Main extends Application {
                     String Lastname = dataInput("What is their last name?", "What is their last name?", "Ex: Jackson");
                     String email = dataInput("What is their email?", "What is their email?", "Ex: FirstLast@school.edu");
                     String Sex = dataInput("What is their sex?", "What is their sex?", "Ex: M/F");
+                    if(Sex.equalsIgnoreCase("m") || Sex.equalsIgnoreCase("f")){
+                        //do nothing
+                    } else{
+                        System.out.println("You entered an incorrect Sex value.");
+                        System.exit(0);
+                    }
+
+
                     Statement stmt6 = conn1.createStatement();
                     boolean result6 = stmt6.execute("INSERT INTO Student VALUES ( '" + ID + "', '" + Firstname + "', '" + Lastname + "', '" + email + "', '" + Sex + "')");
                     System.out.println("\tInsert creation result: " + result6);
@@ -146,22 +156,39 @@ public class Main extends Application {
                 if (conn3 != null) {
                     String IDstudent = dataInput("What is the ID of the student?", "", "Ex: 0001");
                     Statement stmt7 = conn3.createStatement();
+                    //int tempcounter = 0;
                     boolean resultstudent = stmt7.execute("SELECT * FROM Student WHERE student_ID = ' " +  IDstudent  + " '");
-                    if(!resultstudent){
+                    /* while(resultstudent.next()){
+                        tempcounter++;
+                    }
+                    if(tempcounter > 0){
                         System.out.println("This student doesn't exist or the ID is incorrect.");
                         System.exit(0);
-                    }
+                    } */
+
+                   //tempcounter = 0;
                     String IDcourse = dataInput("What is the ID of the course?", "", "Ex: 001");
                     Statement stmt8 = conn3.createStatement();
-                    boolean resultcourse = stmt8.execute("SELECT * FROM Student WHERE student_ID = ' " +  IDcourse  + " '");
-                    if(!resultcourse){
+                    boolean resultcourse = stmt8.execute("SELECT * FROM Courses WHERE course_ID = ' " +  IDcourse  + " '");
+                    /* while(resultcourse.next()){
+                        tempcounter++;
+                    }
+                    if(tempcounter > 0){
                         System.out.println("This course doesn't exist or the ID is incorrect.");
                         System.exit(0);
-                    }
+                    } */
+
+
                     String year = dataInput("What year is the class taken?", "", "Ex: 2020");
                     String section = dataInput("What section is this class in?", "", "Ex: PR1");
                     String semester = dataInput("What semester is this class in?", "", "Ex: Spring 2020");
                     String gpa = dataInput("What is the gpa of the student in this class?", "", "Ex: A, B, C, D, F, or W");
+                    if(gpa.equalsIgnoreCase("a") || gpa.equalsIgnoreCase("b") || gpa.equalsIgnoreCase("c") || gpa.equalsIgnoreCase("d") || gpa.equalsIgnoreCase("f") || gpa.equalsIgnoreCase("w")){
+                        //do nothing
+                    } else{
+                        System.out.println("You entered an incorrect gpa value.");
+                        System.exit(0);
+                    }
 
 
 
@@ -215,7 +242,24 @@ public class Main extends Application {
                             wcount++;
                         }
                     }
-                    System.out.print("Number of people with A: " + acount + " .Number of people with B: " + bcount + " .Number of people with C: " + ccount + " .Number of people with D: " + dcount + " .Number of people with F: " + fcount + " .Number of people with W: " + wcount);
+                    System.out.print("Number of people with A: " + acount + ". Number of people with B: " + bcount + ". Number of people with C: " + ccount + ". Number of people with D: " + dcount + ". Number of people with F: " + fcount + ". Number of people with W: " + wcount);
+                    ObservableList<PieChart.Data> pieChartData =
+                            FXCollections.observableArrayList(
+                                    new PieChart.Data("Students with A gpa", acount),
+                                    new PieChart.Data("Students with B gpa", bcount),
+                                    new PieChart.Data("Students with C gpa", ccount),
+                                    new PieChart.Data("Students with D gpa", dcount),
+                                    new PieChart.Data("Students with F gpa", fcount),
+                                    new PieChart.Data("Students with W gpa", wcount));
+                    final PieChart chart = new PieChart(pieChartData);
+                    chart.setLabelLineLength(10);
+                    chart.setLegendSide(Side.RIGHT);
+                    chart.setTitle("Student GPA in CSc221");
+                    VBox vbox1 = new VBox(chart);
+                    Scene scene1 = new Scene(vbox1, 800,400);
+                    Stage stage1 = new Stage();
+                    stage1.setScene(scene1);
+                    stage1.show();
 
                     conn4.close();
                 }
